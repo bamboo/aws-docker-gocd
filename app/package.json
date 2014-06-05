@@ -1,0 +1,29 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "description": "a node app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bamboo/aws-docker-gocd.git"
+  },
+  "author": "Rodrigo B. de Oliveira <rbo@acm.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bamboo/aws-docker-gocd/issues"
+  },
+  "homepage": "https://github.com/bamboo/aws-docker-gocd",
+  "devDependencies": {
+    "event-stream": "^3.1.5",
+    "gulp": "^3.7.0",
+    "gulp-mjs": "0.0.5"
+  },
+  "dependencies": {
+    "express": "^4.4.1",
+    "source-map-support": "^0.2.6"
+  }
+}
