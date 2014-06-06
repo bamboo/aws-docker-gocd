@@ -27,6 +27,17 @@
       <materials>
         <pipeline pipelineName="build" stageName="compile" materialName="build" />
       </materials>
+      <stage name="fetch">
+        <jobs>
+          <job name="fetch">
+            <tasks>
+              <fetchartifact pipeline="build" stage="compile" job="compile-and-pack" srcfile="app.zip">
+                <runif status="passed" />
+              </fetchartifact>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
       <stage name="aws-deploy">
         <approval type="manual" />
         <environmentvariables>
@@ -52,9 +63,6 @@
         <jobs>
           <job name="deploy">
             <tasks>
-              <fetchartifact pipeline="build" stage="compile" job="compile-and-pack" srcfile="app.zip">
-                <runif status="passed" />
-              </fetchartifact>
               <exec command="/bin/bash">
                 <arg>-e</arg>
                 <arg>/scripts/aws-deploy.sh</arg>
