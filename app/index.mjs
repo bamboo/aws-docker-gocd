@@ -12,7 +12,7 @@ var home = (req, res) ->
   <body>
     <div class="container">
     <h1 class="page-header">A good start</h1>
-      <p>yay!</p>
+      <p class="text-center">yay!</p>
     </div>
   </body>
 </html>
