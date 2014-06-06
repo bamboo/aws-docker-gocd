@@ -24,7 +24,7 @@ gulp.task('build', function () {
     gulp.dest(paths.dest));
 });
 
-gulp.task('pack', function () {
+gulp.task('pack', ['build'], function () {
   return combine(
     gulp.src(paths.zip.src, {cwdbase: true}),
     zip(paths.zip.name),
