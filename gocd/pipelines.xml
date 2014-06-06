@@ -1,0 +1,68 @@
+  <pipelines group="app">
+    <pipeline name="build" labeltemplate="${git}" isLocked="false">
+      <materials>
+        <git url="https://github.com/bamboo/aws-docker-gocd.git" materialName="git" />
+      </materials>
+      <stage name="compile">
+        <jobs>
+          <job name="compile-and-pack">
+            <tasks>
+              <exec command="npm" workingdir="app">
+                <arg>install</arg>
+                <runif status="passed" />
+              </exec>
+              <exec command="gulp" workingdir="app">
+                <arg>pack</arg>
+                <runif status="passed" />
+              </exec>
+            </tasks>
+            <artifacts>
+              <artifact src="app/app.zip" />
+            </artifacts>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="release" labeltemplate="${build}" isLocked="false">
+      <materials>
+        <pipeline pipelineName="build" stageName="compile" materialName="build" />
+      </materials>
+      <stage name="aws-deploy">
+        <approval type="manual" />
+        <environmentvariables>
+          <variable name="AWS_ACCESS_KEY_ID">
+            <value></value>
+          </variable>
+          <variable name="AWS_SECRET_ACCESS_KEY">
+            <value></value>
+          </variable>
+          <variable name="S3_BUCKET">
+            <value></value>
+          </variable>
+          <variable name="AWS_REGION">
+            <value>us-east-1</value>
+          </variable>
+          <variable name="APP_NAME">
+            <value>aws-docker-gocd</value>
+          </variable>
+          <variable name="APP_ENV">
+            <value>aws-docker-gocd-env</value>
+          </variable>
+        </environmentvariables>
+        <jobs>
+          <job name="deploy">
+            <tasks>
+              <fetchartifact pipeline="build" stage="compile" job="compile-and-pack" srcfile="app.zip">
+                <runif status="passed" />
+              </fetchartifact>
+              <exec command="/bin/bash">
+                <arg>-e</arg>
+                <arg>/scripts/aws-deploy.sh</arg>
+                <runif status="passed" />
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>

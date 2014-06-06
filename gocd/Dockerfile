@@ -28,11 +28,18 @@ ENV GO_BASE_URL http://download01.thoughtworks.com/go/$GO_VERSION/ga
 ADD $GO_BASE_URL/$GO_SERVER_DEB /opt/$GO_SERVER_DEB
 ADD $GO_BASE_URL/$GO_AGENT_DEB /opt/$GO_AGENT_DEB
 
-# install server and agent
+# go server
 RUN dpkg -i /opt/$GO_SERVER_DEB
-RUN dpkg -i /opt/$GO_AGENT_DEB
 
 EXPOSE 8153
+
+# go agent
+RUN dpkg -i /opt/$GO_AGENT_DEB
+
+# aws (just required for agent)
+RUN apt-get install -y python-pip
+RUN pip install awscli
+ADD ./scripts /scripts
 
 #/var/lib/go-server       #contains the binaries and database
 #/etc/go                  #contains the pipeline configuration files
